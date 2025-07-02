@@ -1,0 +1,16 @@
+VOICE-BOT/
+│
+├── app.py                    
+├── requirements.txt          
+├── pyvenv.cfg                
+├── venv/                   
+│   ├── bin/
+│   ├── include/
+│   ├── lib/
+│   └── ...                   
+│
+├── static/                   
+│   └── style.css             
+│
+├── templates/                
+│   └── index.html            
