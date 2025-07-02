@@ -23,5 +23,5 @@ A simple, browser-based voice/text assistant built using Flask. This project all
 
 ---
 
-## 📁 Project Structure
+
 
