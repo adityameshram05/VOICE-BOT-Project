@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Assistant</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Updated Header Text -->
+        <h1>Aditya's Voice Assistant</h1>
+
+        <!-- Input field for typed commands -->
+        <input type="text" id="command" placeholder="Type your command here">
+        
+        <!-- Button for sending typed commands -->
+        <button onclick="sendCommand()">Send</button>
+
+        <!-- Microphone button for voice commands -->
+        <button id="mic-button" onclick="startVoiceRecognition()">
+            🎤
+        </button>
+
+        <!-- Display response -->
+        <p id="response"></p>
+    </div>
+
+    <script>
+        // Function to send the command (either typed or voice)
+        async function sendCommand() {
+            const command = document.getElementById("command").value.trim();
+            if (!command) {
+                document.getElementById("response").textContent = "Please enter a command.";
+                return;
+            }
+
+            // Sending the command to the backend (Flask)
+            const res = await fetch("/process", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({command: command})
+            });
+            const data = await res.json();
+            document.getElementById("response").textContent = data.response;
+        }
+
+        // Voice command functionality
+        function startVoiceRecognition() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = "en-US"; // Set language to English
+
+            recognition.start(); // Start listening for speech
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript; // Get the recognized text
+                document.getElementById("command").value = transcript; // Display it in the input field
+                sendCommand(); // Send the command to the server
+            }
+
+            recognition.onerror = function(event) {
+                document.getElementById("response").textContent = "Error recognizing speech. Please try again.";
+            }
+        }
+    </script>
+</body>
+</html>
